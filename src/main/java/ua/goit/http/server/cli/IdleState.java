@@ -12,7 +12,7 @@ public class IdleState extends CliState{
 
     @Override
     public void setPetState() {
-        System.out.println("PET method is processing");
+        System.out.println("to PET menu -->");
         fsm.setState(new PetState(fsm));
     }
 
