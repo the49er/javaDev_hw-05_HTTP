@@ -18,12 +18,14 @@ public class CliFSM {
     public CliFSM(){
         state = new IdleState(this);
         scanner = new Scanner(System.in);
-        starInputLoop();
+        init();
     }
 
-    private void starInputLoop() {
+    private void init() {
         while (true) {
-            System.out.println("Choose an entity\r");
+            System.out.println("_________________");
+            System.out.println("MAIN menu");
+            System.out.println("Choose an entity: PET, STORE, USER or EXIT\r");
             String command = scanner.nextLine();
 
             switch (command) {

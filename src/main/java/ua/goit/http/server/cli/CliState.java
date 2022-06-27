@@ -7,6 +7,7 @@ public class CliState {
     protected final CliFSM fsm;
     public void init(){}
     public void setPetState(){}
+    public void setIdleState(){}
     public void setStoreState(){}
     public void setUserState(){}
     public void postMethodResponse(){}
