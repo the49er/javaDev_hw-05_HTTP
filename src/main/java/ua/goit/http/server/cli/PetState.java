@@ -44,8 +44,7 @@ public class PetState extends CliState {
             case "POST":
                 init();
             case "BACK":
-                System.out.println("to MAIN menu -->");
-                fsm.setState(new IdleState(fsm));
+                back();
                 break;
             case "EXIT":
                 System.exit(0);
@@ -53,6 +52,11 @@ public class PetState extends CliState {
                 unknownCommand(method);
 
         }
+    }
+
+    private void back(){
+        System.out.println("to MAIN menu -->");
+        fsm.setState(new IdleState(fsm));
     }
 
     private Tag addTag() {
