@@ -1,7 +1,7 @@
 package ua.goit.http.server.cli;
 
 public class IdleState extends CliState{
-     protected IdleState(CliFSM fsm) {
+     public IdleState(CliFSM fsm) {
         super(fsm);
     }
 

@@ -11,6 +11,7 @@ import ua.goit.http.server.entity.pet.fields.Category;
 import ua.goit.http.server.entity.pet.Pet;
 import ua.goit.http.server.entity.pet.fields.PetStatus;
 import ua.goit.http.server.entity.pet.fields.Tag;
+import ua.goit.http.server.method.Methods;
 
 import java.io.IOException;
 import java.net.URI;
@@ -28,30 +29,37 @@ public class ServerTest {
     public static void main(String[] args) throws Exception {
         //ServerSocket server = new ServerSocket(20000);
         //Socket connection = server.accept();
-        String uri = "https://petstore.swagger.io/v2/pet";
-        Pet pet2 = new Pet();
-        pet2.setId(1);
-        pet2.setCategory(new Category(1, "string"));
-        pet2.setName("Shimi");
-        pet2.setPhotoUrls(List.of("asdasd"));
-        pet2.setTags(List.of(new Tag(0, "string")));
-        pet2.setStatus(PetStatus.AVAILABLE);
-        System.out.println(GSON.toJson(pet2));
+//        String uri = "https://petstore.swagger.io/v2/pet";
+//        Pet pet2 = new Pet();
+//        pet2.setId(1);
+//        pet2.setCategory(new Category(1, "string"));
+//        pet2.setName("Shimi");
+//        pet2.setPhotoUrls(List.of("asdasd"));
+//        pet2.setTags(List.of(new Tag(0, "string")));
+//        pet2.setStatus(PetStatus.AVAILABLE);
+//        System.out.println(GSON.toJson(pet2));
+//
+//
+//        ServerTest serverTest = new ServerTest();
+//
+//        serverTest.doPost(uri);
+//        System.out.println(serverTest.doPost(uri));
+//
+//        String json = serverTest.doGet(uri, 2);
+//        System.out.println(json);
+//
+//        Pet pet = GSON.fromJson(json, Pet.class);
+//        String body = GSON.toJson(pet);
+//        System.out.println(body);
 
-
-        ServerTest serverTest = new ServerTest();
-
-        serverTest.doPost(uri);
-        System.out.println(serverTest.doPost(uri));
-
-        String json = serverTest.doGet(uri, 2);
-        System.out.println(json);
-
-        Pet pet = GSON.fromJson(json, Pet.class);
-        String body = GSON.toJson(pet);
-        System.out.println(body);
+        String url = "https://petstore.swagger.io/v2/pet/findByStatus?status=";
+        String status = String.valueOf(PetStatus.AVAILABLE).toLowerCase();
+        String result = Methods.doGet(url, status);
+        System.out.println(result);
 
     }
+
+
 
     private Response sendGet(String uri) throws Exception {
 

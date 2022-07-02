@@ -8,6 +8,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Tag{
-    private int id;
+    private long id;
     private String name;
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @ToString
 public class Pet {
-    private int id;
+    private long id;
     private Category category;
     private String name;
     private List<String> photoUrls;

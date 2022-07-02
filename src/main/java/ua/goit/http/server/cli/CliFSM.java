@@ -1,8 +1,9 @@
 package ua.goit.http.server.cli;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
-import ua.goit.http.server.method.Method;
 
 import java.util.Scanner;
 
@@ -11,6 +12,8 @@ public class CliFSM {
     CliState state;
     @Getter
     Scanner scanner;
+    @Getter
+    Gson gson;
     @Setter
     @Getter
     String url;
@@ -18,6 +21,7 @@ public class CliFSM {
     public CliFSM(){
         state = new IdleState(this);
         scanner = new Scanner(System.in);
+        gson = new GsonBuilder().setPrettyPrinting().create();
         init();
     }
 
@@ -25,10 +29,10 @@ public class CliFSM {
         while (true) {
             System.out.println("_________________");
             System.out.println("MAIN menu");
-            System.out.println("Choose an entity: PET, STORE, USER or EXIT\r");
+            System.out.println("Choose an entity: <PET>, <STORE>, <USER>\nBrowsing: <EXIT>\r");
             String command = scanner.nextLine();
 
-            switch (command) {
+            switch (command.toLowerCase()) {
                 case "pet":
                     setPetState();
                     break;
@@ -61,11 +65,11 @@ public class CliFSM {
     public void setUserState(){
         state.setUserState();
     }
-    public void postMethodResponse(){
-        state.postMethodResponse();
+    public void setGetState(){
+        state.setGetState();
     }
-    public void putMethod(){
-        state.putMethod();
+    public void setPutMethodState(){
+        state.setPutMethodState();
     }
     public void putMethodResponse(){
         state.putMethodResponse();
