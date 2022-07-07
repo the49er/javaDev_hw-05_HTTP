@@ -18,12 +18,13 @@ public class IdleState extends CliState{
 
     @Override
     public void setStoreState() {
-        System.out.println("STORE method is processing");
+        System.out.println("to STORE menu -->");
         fsm.setState(new StoreState(fsm));
     }
 
     @Override
     public void setUserState() {
-        System.out.println("USER method is processing");
+        System.out.println("to USER menu -->");
+        fsm.setState( new UserState(fsm));
     }
 }

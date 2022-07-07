@@ -2,7 +2,6 @@ package ua.goit.http.server.cli.services;
 
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -11,19 +10,20 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import ua.goit.http.server.cli.CliFSM;
 import ua.goit.http.server.cli.CliState;
-import ua.goit.http.server.cli.IdleState;
 import ua.goit.http.server.cli.PetState;
 import ua.goit.http.server.entity.ApiResponse;
 import ua.goit.http.server.entity.pet.Pet;
-import ua.goit.http.server.entity.pet.fields.Category;
-import ua.goit.http.server.entity.pet.fields.PetStatus;
-import ua.goit.http.server.entity.pet.fields.Tag;
-import ua.goit.http.server.method.Methods;
+import ua.goit.http.server.entity.pet.Category;
+import ua.goit.http.server.entity.pet.PetStatus;
+import ua.goit.http.server.entity.pet.Tag;
+import ua.goit.http.server.exception.NoSuchPetStatusException;
+import ua.goit.http.server.utils.Methods;
+import ua.goit.http.server.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.List;
+
 
 public class PetPostService extends CliState {
     public PetPostService(CliFSM fsm) {
@@ -52,10 +52,10 @@ public class PetPostService extends CliState {
                 System.out.println(doPostImage());
                 init();
             case "BACK":
-                back();
+                previousMenu();
                 break;
             case "MAIN":
-                main();
+                mainMenu();
                 break;
             case "EXIT":
                 System.exit(0);
@@ -64,63 +64,67 @@ public class PetPostService extends CliState {
         }
     }
 
-    private void back() {
+
+    private void previousMenu() {
         System.out.println("to PET menu -->");
         fsm.setState(new PetState(fsm));
     }
 
-    private void main() {
-        System.out.println("to MAIN menu -->");
-        fsm.setState(new IdleState(fsm));
-    }
 
     private String createNewPet() {
         fsm.setUrl("https://petstore.swagger.io/v2/pet");
         Pet pet = new Pet();
         System.out.println("_________________");
         System.out.println("Create new Pet");
-        System.out.println("input Pet ID: \r");
-        pet.setId(fsm.getScanner().nextLong());
-
+        System.out.println("input Pet ID:");
+        String strId = fsm.getScanner().nextLine();
+        long petId = 0;
+        if (Utils.isLong(strId)) {
+            petId = Long.parseLong(strId);
+        } else {
+            System.out.println("Incorrect input value\nPet has not been created");
+            init();
+        }
         System.out.println("input Pet name: \r");
-        pet.setName(fsm.getScanner().nextLine());
-        System.out.println("Incorrect data has been input");
+        String petName = fsm.getScanner().nextLine();
 
-//        System.out.println("Do you want to set up the tags? Y(yes)\r");
-//        String tags = fsm.getScanner().nextLine();
-//        while (!(tags.equalsIgnoreCase("y"))) {
-//            List<Tag> tagList = null;
-//            Tag tag = addTag();
-//            tagList.add(tag);
-//        }
-//        pet.setTags(List.of(new Tag(0, "string")));
-//        pet.setStatus(PetStatus.AVAILABLE);
-//
-        System.out.println("input Pet's category ID: \r");
-        long catId = fsm.getScanner().nextLong();
-        System.out.println("input the Pet's category name: \r");
+
+        System.out.println("input Pet category ID: \r");
+        String catId = fsm.getScanner().nextLine();
+        long petCategoryId = 0;
+        if (Utils.isLong(catId)) {
+            petCategoryId = Long.parseLong(catId);
+        } else {
+            System.out.println("Incorrect input value\nPet has not been created");
+            init();
+        }
+
+        System.out.println("input Pet's category (type of an animal): \r");
         String categoryName = fsm.getScanner().nextLine();
-        Category category = new Category(catId, categoryName);
 
+        Category category = new Category(petCategoryId, categoryName);
 
-
+        System.out.println("input Pet status: \r");
+        String enumStatus = fsm.getScanner().nextLine();
+        PetStatus status = null;
+        try {
+            status = PetStatus.getEnumFromString(enumStatus);
+        } catch (NoSuchPetStatusException e) {
+            System.out.println("Incorrect status value: " + enumStatus +
+                    "\nAccepted values are: " + PetStatus.getMsgForException());
+            System.out.println("Pet has not been created");
+            init();
+        }
+        pet.setId(petId);
+        pet.setName(petName);
         pet.setPhotoUrls(List.of("noPhotos"));
         pet.setCategory(category);
-        pet.setTags(List.of(new Tag(0, "string")));
-        pet.setStatus(PetStatus.AVAILABLE);
+        pet.setTags(List.of(new Tag(1, "tag1"), new Tag(2, "tag2")));
+        pet.setStatus(status);
         String petJson = fsm.getGson().toJson(pet);
-
         return Methods.doPost(fsm.getUrl(), petJson);
     }
 
-    private Tag addTag() {
-        System.out.println("Add Tag's ID : ");
-        int idTag = fsm.getScanner().nextInt();
-        System.out.println("Add Tag's name");
-        String nameString = fsm.getScanner().nextLine();
-        Tag res = new Tag(idTag, nameString);
-        return res;
-    }
 
     private ApiResponse doPostImage() {
 
