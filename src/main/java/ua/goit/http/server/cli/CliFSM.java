@@ -65,18 +65,6 @@ public class CliFSM {
     public void setUserState(){
         state.setUserState();
     }
-    public void setGetState(){
-        state.setGetState();
-    }
-    public void setPutMethodState(){
-        state.setPutMethodState();
-    }
-    public void putMethodResponse(){
-        state.putMethodResponse();
-    }
-    public void deleteMethodResponse(){
-        state.deleteMethodResponse();
-    }
 
     public void setState (CliState state) {
         this.state = state;

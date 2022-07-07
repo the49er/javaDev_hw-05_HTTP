@@ -7,11 +7,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import ua.goit.http.server.entity.pet.fields.Category;
-import ua.goit.http.server.entity.pet.Pet;
-import ua.goit.http.server.entity.pet.fields.PetStatus;
-import ua.goit.http.server.entity.pet.fields.Tag;
-import ua.goit.http.server.method.Methods;
+import ua.goit.http.server.entity.pet.PetStatus;
+import ua.goit.http.server.utils.Utils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,7 +16,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Paths;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Date;
 
 
 public class ServerTest {
@@ -52,10 +50,13 @@ public class ServerTest {
 //        String body = GSON.toJson(pet);
 //        System.out.println(body);
 
-        String url = "https://petstore.swagger.io/v2/pet/findByStatus?status=";
-        String status = String.valueOf(PetStatus.AVAILABLE).toLowerCase();
-        String result = Methods.doGet(url, status);
-        System.out.println(result);
+//        String url = "https://petstore.swagger.io/v2/pet/findByStatus?status=";
+//        String status = String.valueOf(PetStatus.AVAILABLE).toLowerCase();
+//        String result = Methods.doGet(url, status);
+//        System.out.println(result);
+        //String order = "{"id":1,"petId":1,"quantity":0,"shipDate":"2022-07-01T18:16:43.437+0000","status":"placed","complete":true};
+        Date date = new Date();
+        System.out.println(date.getTime());
 
     }
 

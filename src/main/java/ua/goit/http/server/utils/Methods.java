@@ -1,14 +1,16 @@
-package ua.goit.http.server.method;
+package ua.goit.http.server.utils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Paths;
 
 public class Methods {
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
-    public static String doGet(String url, String str) {
+    public static HttpResponse<String> doGet(String url, String str) {
         HttpRequest getReq = HttpRequest.newBuilder()
                 .uri(URI.create(url + str))
                 .GET()
@@ -20,7 +22,7 @@ public class Methods {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return response.body();
+        return response;
     }
 
     public static String doPost(String url, String body) {
@@ -30,6 +32,26 @@ public class Methods {
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .header("Content-Type", "application/json")
                 .build();
+        HttpResponse<String> response = null;
+        try {
+            response = CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return response.body();
+    }
+
+    public static String doPostFromFile(String url, String path) {
+        HttpRequest request;
+        try {
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .POST(HttpRequest.BodyPublishers.ofFile(Paths.get(path)))
+                    .header("Content-Type", "application/json")
+                    .build();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         HttpResponse<String> response = null;
         try {
             response = CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
@@ -60,7 +82,7 @@ public class Methods {
         request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .PUT(HttpRequest.BodyPublishers.ofString(body))
-                .header("api_key", "special-key")
+                .header("Content-Type", "application/json")
                 .build();
         HttpResponse<String> response = null;
         try {
